@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BCTI - ছুটির দরখাস্ত (লাইন হাইট + ইনডেন্ট স্লাইডার)</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.maateen.me/apona-lohit/font.css" rel="stylesheet">
+    <link href="https://fonts.maateen.me/adorsho-lipi/font.css" rel="stylesheet">
+    <link href="https://fonts.maateen.me/charukola-ultra-light/font.css" rel="stylesheet">
+    <link href="https://fonts.maateen.me/solaiman-lipi/font.css" rel="stylesheet">
+    <link href="https://fonts.maateen.me/kalpurush/font.css" rel="stylesheet">
+    <link href="https://fonts.maateen.me/siyam-rupali/font.css" rel="stylesheet">
+    <link href="https://fonts.maateen.me/nikosh/font.css" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: font-size 0.1s ease, line-height 0.1s ease, text-indent 0.1s ease;
+        }
+        
+        body {
+            font-family: 'Hind Siliguri', Arial, sans-serif;
+            background: #f0f2f5;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        /* ===== গ্লোবাল ফন্ট সাইজ কন্ট্রোল ===== */
+        :root {
+            --base-font-size: 16px;
+            --base-line-height: 2.2;
+            --base-indent: 2.5;
+        }
+        
+        body, .sidebar, .main-content, .form-section, .preview-card, .letter-preview {
+            font-size: var(--base-font-size);
+        }
+        
+        /* ===== সাইডবার - ইনপুট ফর্ম ===== */
+        .sidebar {
+            width: 440px;
+            background: white;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            overflow-y: auto;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        
+        .sidebar-header {
+            background: #3498db;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.25em;
+            font-weight: 600;
+        }
+        
+        .form-section {
+            background: #f9fbfd;
+            padding: 1.25em;
+            border-radius: 12px;
+            margin-bottom: 1.25em;
+            border: 1px solid #e9ecef;
+        }
+        
+        .form-title {
+            color: #2c3e50;
+            font-size: 1em;
+            font-weight: 700;
+            margin-bottom: 0.9em;
+            padding-bottom: 0.5em;
+            border-bottom: 2px dashed #3498db;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .form-group {
+            margin-bottom: 0.9em;
+        }
+        
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 0.3em;
+            font-size: 0.9em;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 0.7em 0.9em;
+            border: 1px solid #ced4da;
+            border-radius: 8px;
+            font-size: 0.95em;
+            font-family: inherit;
+            background: white;
+            transition: all 0.2s;
+        }
+        
+        .form-control:focus {
+            border-color: #3498db;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(52,152,219,0.1);
+        }
+        
+        .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.8em;
+        }
+        
+        /* ===== গ্লোবাল ফন্ট কন্ট্রোল প্যানেল ===== */
+        .global-font-panel {
+            background: linear-gradient(145deg, #2c3e50, #1e2b38);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border: 2px solid #3498db;
+            position: relative;
+            color: white;
+        }
+        
+        .global-font-title {
+            position: absolute;
+            top: -12px;
+            left: 15px;
+            background: #e67e22;
+            color: white;
+            padding: 4px 18px;
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .global-font-selector {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 15px;
+        }
+        
+        .global-font-selector select {
+            flex: 1;
+            padding: 12px 16px;
+            border: 2px solid #3498db;
+            border-radius: 50px;
+            font-size: 15px;
+            font-weight: 500;
+            background: white;
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%233498db'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 20px;
+        }
+        
+        /* ফন্ট সাইজ কন্ট্রোল */
+        .control-group {
+            margin-top: 15px;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .control-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            color: #ecf0f1;
+            font-size: 14px;
+        }
+        
+        .control-label span:first-child {
+            font-weight: 600;
+        }
+        
+        .control-label span:last-child {
+            background: #e67e22;
+            padding: 2px 12px;
+            border-radius: 50px;
+            font-size: 13px;
+        }
+        
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .slider-container input {
+            flex: 1;
+            height: 8px;
+            -webkit-appearance: none;
+            background: #34495e;
+            border-radius: 10px;
+            outline: none;
+        }
+        
+        .slider-container input::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 22px;
+            height: 22px;
+            background: #e67e22;
+            border: 2px solid white;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            transition: 0.2s;
+        }
+        
+        .slider-container input::-webkit-slider-thumb:hover {
+            background: #d35400;
+            transform: scale(1.1);
+        }
+        
+        .slider-value {
+            background: #3498db;
+            color: white;
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 14px;
+            min-width: 70px;
+            text-align: center;
+        }
+        
+        .size-presets {
+            display: flex;
+            gap: 8px;
+            margin-top: 15px;
+            justify-content: space-between;
+        }
+        
+        .size-preset-btn {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: 0.2s;
+            flex: 1;
+            text-align: center;
+        }
+        
+        .size-preset-btn:hover {
+            background: #3498db;
+            border-color: white;
+        }
+        
+        .global-preview-text {
+            background: rgba(255,255,255,0.1);
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-size: 14px;
+            color: #ecf0f1;
+            border-left: 5px solid #e67e22;
+            text-align: center;
+        }
+        
+        /* ===== মেইন কন্টেন্ট - প্রিভিউ ===== */
+        .main-content {
+            flex: 1;
+            background: #e9ecef;
+            padding: 30px;
+            overflow-y: auto;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+        
+        .preview-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 30px;
+            width: 100%;
+            max-width: 800px;
+        }
+        
+        .preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #3498db;
+        }
+        
+        .preview-title {
+            font-size: 1.2em;
+            font-weight: 700;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .preview-badge {
+            background: #3498db;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+        
+        .letter-preview {
+            font-family: 'Hind Siliguri', Arial, sans-serif;
+            padding: 1.8em 1.5em;
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 12px;
+            font-size: 1em;
+            line-height: 2.2;
+            transition: all 0.2s;
+        }
+        
+        .borabor {
+            font-size: 1.1em;
+            font-weight: 700;
+            margin-bottom: 0.3em;
+        }
+        
+        .padobi {
+            font-size: 1.05em;
+            font-weight: 600;
+            margin-bottom: 0.3em;
+            color: #2c3e50;
+            display: inline-block;
+        }
+        
+        .address-line {
+            font-size: 1em;
+            margin-bottom: 0.3em;
+        }
+        
+        .bishoy {
+            margin: 1.5em 0 1.2em 0;
+            font-size: 1em;
+        }
+        
+        .jonab {
+            margin: 0.8em 0 0.8em 0;
+        }
+        
+        .content {
+            text-align: justify;
+        }
+        
+        .content p {
+            margin-bottom: 1.2em;
+            text-indent: 2.5em;
+        }
+        
+        .data-field {
+            color: #2c3e50;
+            padding: 0 2px;
+            font-weight: normal;
+        }
+        
+        .date-left {
+            float: left;
+            width: 50%;
+            margin-top: 1.8em;
+        }
+        
+        .sign-right {
+            float: right;
+            width: 50%;
+            text-align: center;
+            margin-top: 1.2em;
+        }
+        
+        .sign-box {
+            border-top: 1px solid #333;
+            width: 80%;
+            margin: 0.8em auto 0.3em;
+            padding-top: 0.5em;
+        }
+        
+        .clear {
+            clear: both;
+        }
+        
+        .mobile {
+            margin-top: 1.2em;
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 0.8em 1.2em;
+            border: none;
+            border-radius: 50px;
+            font-size: 0.95em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: inherit;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: #3498db;
+            color: white;
+        }
+        
+        .btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52,152,219,0.3);
+        }
+        
+        .btn-green {
+            background: #27ae60;
+        }
+        
+        .btn-green:hover {
+            background: #229954;
+        }
+        
+        .btn-orange {
+            background: #e67e22;
+        }
+        
+        .btn-orange:hover {
+            background: #d35400;
+        }
+        
+        @media print {
+            body {
+                background: white;
+                display: block;
+                overflow: auto;
+            }
+            
+            .sidebar,
+            .preview-header,
+            .btn-group,
+            .preview-card,
+            .global-font-panel {
+                display: none !important;
+            }
+            
+            .main-content {
+                padding: 0;
+                background: white;
+                display: block;
+            }
+            
+            .letter-preview {
+                box-shadow: none;
+                border: none;
+                padding: 0.5in;
+                font-size: 12pt !important;
+                line-height: var(--base-line-height) !important;
+            }
+            
+            .content p {
+                text-indent: calc(var(--base-indent) * 1em) !important;
+            }
+            
+            @page {
+                size: A4;
+                margin: 0.5in;
+            }
+        }
+        
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .sidebar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        
+        .sidebar::-webkit-scrollbar-thumb {
+            background: #3498db;
+            border-radius: 3px;
+        }
+        
+        .main-content::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .main-content::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        
+        .main-content::-webkit-scrollbar-thumb {
+            background: #95a5a6;
+            border-radius: 4px;
+        }
+        
+        @media (max-width: 900px) {
+            body {
+                flex-direction: column;
+                height: auto;
+                overflow: auto;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+            }
+            
+            .main-content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <style id="global-font-style">
+        :root {
+            --base-font-size: 16px;
+            --base-font-family: 'Hind Siliguri', sans-serif;
+            --base-line-height: 2.2;
+            --base-indent: 2.5;
+        }
+        body, .sidebar, .main-content, .form-section, .preview-card, .letter-preview {
+            font-size: var(--base-font-size);
+            font-family: var(--base-font-family);
+        }
+        .letter-preview {
+            line-height: var(--base-line-height);
+        }
+        .content p {
+            text-indent: calc(var(--base-indent) * 1em);
+        }
+    </style>
+
+<!-- ===== সাইডবার - ইনপুট ফর্ম ===== -->
+<div class="sidebar">
+    <div class="sidebar-header">
+        <span>📋</span> BCTI - ছুটির দরখাস্ত
+    </div>
+    
+    <!-- ===== গ্লোবাল ফন্ট কন্ট্রোল প্যানেল ===== -->
+    <div class="global-font-panel">
+        <div class="global-font-title">🌐 গ্লোবাল ফন্ট কন্ট্রোল</div>
+        
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 5px;">
+            <span style="background: #e67e22; padding: 3px 10px; border-radius: 50px; font-size: 12px; font-weight: 600;">সম্পূর্ণ পেজে ইফেক্ট</span>
+        </div>
+        
+        <!-- ফন্ট সিলেক্টর -->
+        <div class="global-font-selector">
+            <select id="globalFontFamily" onchange="changeGlobalFont()">
+                <option value="'Hind Siliguri', sans-serif">⭐ হিন্দ সিলিগুড়ি (প্রস্তাবিত)</option>
+                <option value="'Noto Serif Bengali', serif">নোটো সেরিফ বাংলা</option>
+                <option value="'AponaLohit', sans-serif">অপনা লোহিত</option>
+                <option value="'AdorshoLipi', Arial, sans-serif">আদর্শলিপি</option>
+                <option value="'CharukolaUltraLight', sans-serif">চারুকলা</option>
+                <option value="'SolaimanLipi', Arial, sans-serif">সলিমান লিপি</option>
+                <option value="'Kalpurush', Arial, sans-serif">কালপুরুষ</option>
+                <option value="'Siyam Rupali', sans-serif">সিয়াম রুপালি</option>
+                <option value="'Nikosh', Arial, sans-serif">নিকোশ</option>
+                <option value="Arial, sans-serif">এরিয়াল</option>
+                <option value="'Times New Roman', serif">টাইমস নিউ রোমান</option>
+            </select>
+        </div>
+        
+        <!-- ফন্ট সাইজ স্লাইডার -->
+        <div class="control-group">
+            <div class="control-label">
+                <span>📏 ফন্ট সাইজ</span>
+                <span id="fontSizeValue">16px</span>
+            </div>
+            <div class="slider-container">
+                <input type="range" id="globalFontSize" min="12" max="24" value="16" step="1" oninput="changeGlobalFontSize(this.value)">
+                <span class="slider-value" id="fontSizeDisplay">16px</span>
+            </div>
+            <div class="size-presets">
+                <div class="size-preset-btn" onclick="setGlobalFontSize(12)">ছোট</div>
+                <div class="size-preset-btn" onclick="setGlobalFontSize(14)">নরমাল</div>
+                <div class="size-preset-btn" onclick="setGlobalFontSize(16)">মাঝারি</div>
+                <div class="size-preset-btn" onclick="setGlobalFontSize(18)">বড়</div>
+                <div class="size-preset-btn" onclick="setGlobalFontSize(20)">অতিবড়</div>
+            </div>
+        </div>
+        
+        <!-- লাইন হাইট স্লাইডার - নতুন -->
+        <div class="control-group">
+            <div class="control-label">
+                <span>📐 লাইন হাইট (স্পেসিং)</span>
+                <span id="lineHeightValue">2.2</span>
+            </div>
+            <div class="slider-container">
+                <input type="range" id="lineHeightSlider" min="1.5" max="3.0" value="2.2" step="0.1" oninput="changeLineHeight(this.value)">
+                <span class="slider-value" id="lineHeightDisplay">2.2</span>
+            </div>
+            <div class="size-presets">
+                <div class="size-preset-btn" onclick="setLineHeight(1.6)">কম</div>
+                <div class="size-preset-btn" onclick="setLineHeight(1.8)">নরমাল</div>
+                <div class="size-preset-btn" onclick="setLineHeight(2.0)">মাঝারি</div>
+                <div class="size-preset-btn" onclick="setLineHeight(2.2)">বেশি</div>
+                <div class="size-preset-btn" onclick="setLineHeight(2.5)">অতিবেশি</div>
+            </div>
+        </div>
+        
+        <!-- ইনডেন্ট স্লাইডার - নতুন -->
+        <div class="control-group">
+            <div class="control-label">
+                <span>📝 প্যারা ইনডেন্ট (gap)</span>
+                <span id="indentValue">2.5em</span>
+            </div>
+            <div class="slider-container">
+                <input type="range" id="indentSlider" min="1.0" max="4.0" value="2.5" step="0.1" oninput="changeIndent(this.value)">
+                <span class="slider-value" id="indentDisplay">2.5em</span>
+            </div>
+            <div class="size-presets">
+                <div class="size-preset-btn" onclick="setIndent(1.5)">কম</div>
+                <div class="size-preset-btn" onclick="setIndent(2.0)">নরমাল</div>
+                <div class="size-preset-btn" onclick="setIndent(2.5)">মাঝারি</div>
+                <div class="size-preset-btn" onclick="setIndent(3.0)">বেশি</div>
+                <div class="size-preset-btn" onclick="setIndent(3.5)">অতিবেশি</div>
+            </div>
+        </div>
+        
+        <div class="global-preview-text" id="globalFontPreview">
+            🔥 ফন্ট: হিন্দ সিলিগুড়ি | সাইজ: 16px | লাইন হাইট: 2.2 | ইনডেন্ট: 2.5em
+        </div>
+    </div>
+    
+    <!-- প্রতিষ্ঠানের তথ্য -->
+    <div class="form-section">
+        <div class="form-title">
+            <span>🏛️</span> প্রতিষ্ঠানের তথ্য
+        </div>
+        
+        <div class="form-group">
+            <label>👨‍🏫 পদবী (বরাবর)</label>
+            <select id="designation" class="form-control" onchange="updatePreview()">
+                <option value="প্রধান শিক্ষক">প্রধান শিক্ষক</option>
+                <option value="অধ্যক্ষ">অধ্যক্ষ</option>
+                <option value="উপাধ্যক্ষ">উপাধ্যক্ষ</option>
+                <option value="সহকারী প্রধান শিক্ষক">সহকারী প্রধান শিক্ষক</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label>✍️ অথবা নিজে লিখুন</label>
+            <input type="text" id="customDesignation" class="form-control" placeholder="যেমন: প্রধান শিক্ষক" oninput="updatePreview()">
+        </div>
+        
+        <div class="form-group">
+            <label>🏫 প্রতিষ্ঠানের নাম</label>
+            <input type="text" id="schoolName" class="form-control" value="মওলানা ছাইফ উদ্দিন এদ্দিয়া উচ্চ বিদ্যালয়" oninput="updatePreview()">
+        </div>
+        
+        <div class="row">
+            <div class="form-group">
+                <label>📍 উপজেলা</label>
+                <input type="text" id="upazila" class="form-control" value="শাহজাদপুর" oninput="updatePreview()">
+            </div>
+            <div class="form-group">
+                <label>🗺️ জেলা</label>
+                <input type="text" id="district" class="form-control" value="সিরাজগঞ্জ" oninput="updatePreview()">
+            </div>
+        </div>
+    </div>
+    
+    <!-- শিক্ষার্থীর তথ্য -->
+    <div class="form-section">
+        <div class="form-title">
+            <span>👤</span> শিক্ষার্থীর তথ্য
+        </div>
+        
+        <div class="form-group">
+            <label>🧑 শিক্ষার্থীর নাম</label>
+            <input type="text" id="studentName" class="form-control" placeholder="বাবুল আকতার খান" oninput="updatePreview()">
+        </div>
+        
+        <div class="row">
+            <div class="form-group">
+                <label>👨 পিতার নাম</label>
+                <input type="text" id="fatherName" class="form-control" placeholder="জয়নুল আবেদীন খান" oninput="updatePreview()">
+            </div>
+            <div class="form-group">
+                <label>👩 মাতার নাম</label>
+                <input type="text" id="motherName" class="form-control" placeholder="শাহানা যিনা" oninput="updatePreview()">
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label>🏠 গ্রাম/ঠিকানা</label>
+            <input type="text" id="village" class="form-control" placeholder="যশরখালী উদ্দলিাড়া" oninput="updatePreview()">
+        </div>
+        
+        <div class="row">
+            <div class="form-group">
+                <label>📚 শ্রেণী</label>
+                <select id="class" class="form-control" onchange="updatePreview()">
+                    <option value="৬ষ্ঠ">৬ষ্ঠ শ্রেণী</option>
+                    <option value="৭ম">৭ম শ্রেণী</option>
+                    <option value="৮ম">৮ম শ্রেণী</option>
+                    <option value="৯ম">৯ম শ্রেণী</option>
+                    <option value="১০ম">১০ম শ্রেণী</option>
+                    <option value="একাদশ">একাদশ শ্রেণী</option>
+                    <option value="দ্বাদশ">দ্বাদশ শ্রেণী</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>📖 বিভাগ</label>
+                <select id="department" class="form-control" onchange="updatePreview()">
+                    <option value="বিজ্ঞান">বিজ্ঞান</option>
+                    <option value="মানবিক">মানবিক</option>
+                    <option value="বাণিজ্য">বাণিজ্য</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="form-group">
+                <label>🔢 রোল নং</label>
+                <input type="text" id="roll" class="form-control" placeholder="২০২" oninput="updatePreview()">
+            </div>
+            <div class="form-group">
+                <label>📅 সেশন</label>
+                <select id="session" class="form-control" onchange="updatePreview()">
+                    <option value="২০২৩-২৪">২০২৩-২৪</option>
+                    <option value="২০২৪-২৫">২০২৪-২৫</option>
+                    <option value="২০২৫-২৬">২০২৫-২৬</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    
+    <!-- ছুটির বিবরণ -->
+    <div class="form-section">
+        <div class="form-title">
+            <span>📆</span> ছুটির বিবরণ
+        </div>
+        
+        <div class="row">
+            <div class="form-group">
+                <label>📅 শুরুর তারিখ</label>
+                <input type="date" id="startDate" class="form-control" value="2026-02-11" onchange="updatePreview()">
+            </div>
+            <div class="form-group">
+                <label>📅 শেষের তারিখ</label>
+                <input type="date" id="endDate" class="form-control" value="2026-02-12" onchange="updatePreview()">
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label>📋 ছুটির কারণ</label>
+            <select id="reason" class="form-control" onchange="updatePreview()">
+                <option value="পারিবারিক কাজ">পারিবারিক কাজ</option>
+                <option value="অসুস্থতা">অসুস্থতা</option>
+                <option value="বিয়ের অনুষ্ঠান">বিয়ের অনুষ্ঠান</option>
+                <option value="আত্মীয়ের বাড়ি যাওয়া">আত্মীয়ের বাড়ি যাওয়া</option>
+            </select>
+        </div>
+    </div>
+    
+    <!-- অভিভাবকের তথ্য -->
+    <div class="form-section">
+        <div class="form-title">
+            <span>📞</span> অভিভাবকের তথ্য
+        </div>
+        
+        <div class="form-group">
+            <label>📱 মোবাইল নম্বর</label>
+            <input type="text" id="phone" class="form-control" placeholder="০১৭১৫ ০৮২৩২৫" oninput="updatePreview()">
+        </div>
+    </div>
+    
+    <!-- বাটন গ্রুপ -->
+    <div class="btn-group">
+        <button class="btn btn-green" onclick="printDocument()">
+            🖨️ প্রিন্ট
+        </button>
+        <button class="btn" onclick="updatePreview()">
+            🔄 আপডেট
+        </button>
+        <button class="btn btn-orange" onclick="saveData()">
+            💾 সেভ
+        </button>
+    </div>
+</div>
+
+<!-- ===== মেইন কন্টেন্ট - প্রিভিউ ===== -->
+<div class="main-content">
+    <div class="preview-card">
+        <div class="preview-header">
+            <div class="preview-title">
+                <span>📄</span> দরখাস্ত প্রিভিউ
+            </div>
+            <div class="preview-badge">
+                গ্লোবাল ফন্ট: <span id="previewFontBadge">16px</span>
+            </div>
+        </div>
+        
+        <!-- দরখাস্ত প্রিভিউ -->
+        <div id="print-area" class="letter-preview">
+            <!-- বরাবর -->
+            <div class="borabor">বরাবর,</div>
+            
+            <!-- পদবী -->
+            <div id="printDesignation" class="padobi">প্রধান শিক্ষক</div>
+            
+            <!-- ঠিকানা -->
+            <div id="printSchool" class="address-line">মওলানা ছাইফ উদ্দিন এদ্দিয়া উচ্চ বিদ্যালয়</div>
+            <div id="printAddress" class="address-line">শাহজাদপুর, সিরাজগঞ্জ।</div>
+            
+            <!-- বিষয় -->
+            <div class="bishoy">বিষয়ঃ ছুটির জন্য আবেদন প্রসঙ্গে।</div>
+            
+            <!-- জনাব -->
+            <div class="jonab">জনাব,</div>
+            
+            <!-- বডি -->
+            <div class="content">
+                <p>
+                    বিনীত নিবেদন এই যে, আমি <span id="printStudent" class="data-field">বাবুল আকতার খান</span>, 
+                    পিতা- <span id="printFather" class="data-field">জয়নুল আবেদীন খান</span>, 
+                    মাতা- <span id="printMother" class="data-field">শাহানা যিনা</span>, 
+                    গ্রাম- <span id="printVillage" class="data-field">যশরখালী উদ্দলিাড়া</span>, 
+                    শাহজাদপুর, সিরাজগঞ্জ। আপনার প্রতিষ্ঠানের <span id="printClass" class="data-field">৬ষ্ঠ</span> শ্রেণীর 
+                    <span id="printDept" class="data-field">বিজ্ঞান</span> বিভাগের শিক্ষার্থী। 
+                    আমার রোল নং- <span id="printRoll" class="data-field">২০২</span>, 
+                    সেশন- <span id="printSession" class="data-field">২০২৩-২৪</span>। 
+                    আমি <span id="printReason" class="data-field">পারিবারিক কাজের</span> কারণে 
+                    আগামী <span id="printStart" class="data-field">১১/০২/২০২৬</span> তারিখ থেকে 
+                    <span id="printEnd" class="data-field">১২/০২/২০২৬</span> তারিখ পর্যন্ত 
+                    বিদ্যালয়ে উপস্থিত হতে পারব না। এজন্য আমার মোট 
+                    <span id="printDays" class="data-field">২</span> দিনের ছুটির প্রয়োজন।
+                </p>
+                <p>
+                    বিনীত প্রার্থনা, আমাকে উক্ত <span id="printDays2" class="data-field">২</span> দিনের 
+                    ছুটি মঞ্জুর করে বাধিত করবেন।
+                </p>
+            </div>
+            
+            <!-- তারিখ - বামে -->
+            <div class="date-left">
+                তারিখ: <span id="printDate">১১/০২/২০২৬ খ্রি.</span>
+            </div>
+            
+            <!-- স্বাক্ষর - ডানে -->
+            <div class="sign-right">
+                <div>বিনীত নিবেদক-</div><br>
+                <div class="sign-box" id="printSignature">(বাবুল আকতার খান)</div>
+            </div>
+            
+            <div class="clear"></div>
+            
+            <!-- মোবাইল - বামে -->
+            <div class="mobile">
+                অভিভাবকের মোবাইল নং: <span id="printPhone" class="data-field">০১৭১৫ ০৮২৩২৫</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // লোড হওয়ার সাথে সাথে
+    window.onload = function() {
+        loadData();
+        setTodayDate();
+        updatePreview();
+        loadGlobalFontSettings();
+    };
+    
+    // ইংরেজি থেকে বাংলা সংখ্যা
+    function toBangla(num) {
+        const map = {
+            '0':'০','1':'১','2':'২','3':'৩','4':'৪',
+            '5':'৫','6':'৬','7':'৭','8':'৮','9':'৯'
+        };
+        return num.toString().split('').map(d => map[d] || d).join('');
+    }
+    
+    // তারিখ ফরম্যাট
+    function formatBanglaDate(dateStr) {
+        if(!dateStr) return '__/__/____';
+        const [y, m, d] = dateStr.split('-');
+        return `${toBangla(d)}/${toBangla(m)}/${toBangla(y)}`;
+    }
+    
+    // আজকের তারিখ সেট
+    function setTodayDate() {
+        const today = new Date();
+        const d = String(today.getDate()).padStart(2, '0');
+        const m = String(today.getMonth() + 1).padStart(2, '0');
+        const y = today.getFullYear();
+        document.getElementById('printDate').innerText = `${toBangla(d)}/${toBangla(m)}/${toBangla(y)} খ্রি.`;
+    }
+    
+    // পদবী নেওয়া
+    function getPadobi() {
+        const custom = document.getElementById('customDesignation').value.trim();
+        return custom || document.getElementById('designation').value;
+    }
+    
+    // ===== গ্লোবাল ফন্ট ফাংশন =====
+    function changeGlobalFont() {
+        const font = document.getElementById('globalFontFamily').value;
+        document.documentElement.style.setProperty('--base-font-family', font);
+        
+        const preview = document.getElementById('print-area');
+        preview.style.fontFamily = font;
+        
+        updatePreviewText();
+        saveGlobalFontSettings();
+    }
+    
+    function changeGlobalFontSize(size) {
+        document.documentElement.style.setProperty('--base-font-size', size + 'px');
+        
+        document.getElementById('globalFontSize').value = size;
+        document.getElementById('fontSizeValue').innerHTML = size + 'px';
+        document.getElementById('fontSizeDisplay').innerHTML = size + 'px';
+        document.getElementById('previewFontBadge').innerHTML = size + 'px';
+        
+        const preview = document.getElementById('print-area');
+        preview.style.fontSize = size + 'px';
+        
+        updatePreviewText();
+        saveGlobalFontSettings();
+    }
+    
+    function setGlobalFontSize(size) {
+        changeGlobalFontSize(size);
+    }
+    
+    // ===== লাইন হাইট ফাংশন =====
+    function changeLineHeight(value) {
+        document.documentElement.style.setProperty('--base-line-height', value);
+        
+        document.getElementById('lineHeightSlider').value = value;
+        document.getElementById('lineHeightValue').innerHTML = value;
+        document.getElementById('lineHeightDisplay').innerHTML = value;
+        
+        const preview = document.getElementById('print-area');
+        preview.style.lineHeight = value;
+        
+        updatePreviewText();
+        saveGlobalFontSettings();
+    }
+    
+    function setLineHeight(value) {
+        changeLineHeight(value);
+    }
+    
+    // ===== ইনডেন্ট ফাংশন =====
+    function changeIndent(value) {
+        document.documentElement.style.setProperty('--base-indent', value);
+        
+        document.getElementById('indentSlider').value = value;
+        document.getElementById('indentValue').innerHTML = value + 'em';
+        document.getElementById('indentDisplay').innerHTML = value + 'em';
+        
+        const paragraphs = document.querySelectorAll('#print-area .content p');
+        paragraphs.forEach(p => {
+            p.style.textIndent = value + 'em';
+        });
+        
+        updatePreviewText();
+        saveGlobalFontSettings();
+    }
+    
+    function setIndent(value) {
+        changeIndent(value);
+    }
+    
+    // ===== প্রিভিউ টেক্সট আপডেট =====
+    function updatePreviewText() {
+        const font = document.getElementById('globalFontFamily').value;
+        const fontName = font.split(',')[0].replace(/'/g, '');
+        const size = document.getElementById('globalFontSize').value;
+        const lineHeight = document.getElementById('lineHeightSlider').value;
+        const indent = document.getElementById('indentSlider').value;
+        
+        document.getElementById('globalFontPreview').innerHTML = `🔥 ফন্ট: ${fontName} | সাইজ: ${size}px | লাইন হাইট: ${lineHeight} | ইনডেন্ট: ${indent}em`;
+    }
+    
+    function saveGlobalFontSettings() {
+        const settings = {
+            font: document.getElementById('globalFontFamily').value,
+            size: document.getElementById('globalFontSize').value,
+            lineHeight: document.getElementById('lineHeightSlider').value,
+            indent: document.getElementById('indentSlider').value
+        };
+        localStorage.setItem('bcti_global_font_all_settings', JSON.stringify(settings));
+    }
+    
+    function loadGlobalFontSettings() {
+        const saved = localStorage.getItem('bcti_global_font_all_settings');
+        if(saved) {
+            try {
+                const data = JSON.parse(saved);
+                if(data.font) {
+                    document.getElementById('globalFontFamily').value = data.font;
+                    changeGlobalFont();
+                }
+                if(data.size) {
+                    document.getElementById('globalFontSize').value = data.size;
+                    changeGlobalFontSize(data.size);
+                }
+                if(data.lineHeight) {
+                    document.getElementById('lineHeightSlider').value = data.lineHeight;
+                    changeLineHeight(data.lineHeight);
+                }
+                if(data.indent) {
+                    document.getElementById('indentSlider').value = data.indent;
+                    changeIndent(data.indent);
+                }
+            } catch(e) {}
+        }
+    }
+    
+    // প্রিভিউ আপডেট
+    function updatePreview() {
+        // পদবী
+        document.getElementById('printDesignation').innerText = getPadobi();
+        
+        // প্রতিষ্ঠান
+        document.getElementById('printSchool').innerText = document.getElementById('schoolName').value || 'মওলানা ছাইফ উদ্দিন এদ্দিয়া উচ্চ বিদ্যালয়';
+        const upazila = document.getElementById('upazila').value || 'শাহজাদপুর';
+        const district = document.getElementById('district').value || 'সিরাজগঞ্জ';
+        document.getElementById('printAddress').innerText = `${upazila}, ${district}।`;
+        
+        // শিক্ষার্থী
+        const student = document.getElementById('studentName').value || 'বাবুল আকতার খান';
+        document.getElementById('printStudent').innerText = student;
+        document.getElementById('printFather').innerText = document.getElementById('fatherName').value || 'জয়নুল আবেদীন খান';
+        document.getElementById('printMother').innerText = document.getElementById('motherName').value || 'শাহানা যিনা';
+        document.getElementById('printVillage').innerText = document.getElementById('village').value || 'যশরখালী উদ্দলিাড়া';
+        document.getElementById('printClass').innerText = document.getElementById('class').value || '৬ষ্ঠ';
+        document.getElementById('printDept').innerText = document.getElementById('department').value || 'বিজ্ঞান';
+        document.getElementById('printRoll').innerText = document.getElementById('roll').value || '২০২';
+        document.getElementById('printSession').innerText = document.getElementById('session').value || '২০২৩-২৪';
+        
+        // তারিখ
+        const start = document.getElementById('startDate').value;
+        const end = document.getElementById('endDate').value;
+        document.getElementById('printStart').innerText = formatBanglaDate(start);
+        document.getElementById('printEnd').innerText = formatBanglaDate(end);
+        
+        // দিন গণনা
+        if(start && end) {
+            const s = new Date(start);
+            const e = new Date(end);
+            const days = Math.ceil(Math.abs(e - s) / (1000 * 60 * 60 * 24)) + 1;
+            const banglaDays = toBangla(days);
+            document.getElementById('printDays').innerText = banglaDays;
+            document.getElementById('printDays2').innerText = banglaDays;
+        }
+        
+        // কারণ
+        let reason = document.getElementById('reason').value || 'পারিবারিক কাজ';
+        let reasonText = reason;
+        
+        if (reason === 'অসুস্থতা') {
+            reasonText = 'অসুস্থতার';
+        } else if (reason === 'পারিবারিক কাজ') {
+            reasonText = 'পারিবারিক কাজের';
+        } else if (reason === 'বিয়ের অনুষ্ঠান') {
+            reasonText = 'বিয়ের অনুষ্ঠানের';
+        } else if (reason === 'আত্মীয়ের বাড়ি যাওয়া') {
+            reasonText = 'আত্মীয়ের বাড়ি যাওয়ার';
+        }
+        
+        document.getElementById('printReason').innerText = reasonText;
+        
+        // ফোন
+        document.getElementById('printPhone').innerText = document.getElementById('phone').value || '০১৭১৫ ০৮২৩২৫';
+        
+        // স্বাক্ষর
+        document.getElementById('printSignature').innerText = `(${student})`;
+    }
+    
+    // প্রিন্ট ফাংশন
+    function printDocument() {
+        updatePreview();
+        
+        setTimeout(function() {
+            const printContents = document.getElementById('print-area').innerHTML;
+            const fontFamily = document.getElementById('globalFontFamily').value;
+            const fontSize = document.getElementById('globalFontSize').value;
+            const lineHeight = document.getElementById('lineHeightSlider').value;
+            const indent = document.getElementById('indentSlider').value;
+            
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(`
+                <html>
+                    <head>
+                        <title>ছুটির দরখাস্ত - BCTI</title>
+                        <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+                        <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
+                        <link href="https://fonts.maateen.me/apona-lohit/font.css" rel="stylesheet">
+                        <link href="https://fonts.maateen.me/adorsho-lipi/font.css" rel="stylesheet">
+                        <link href="https://fonts.maateen.me/charukola-ultra-light/font.css" rel="stylesheet">
+                        <link href="https://fonts.maateen.me/solaiman-lipi/font.css" rel="stylesheet">
+                        <link href="https://fonts.maateen.me/kalpurush/font.css" rel="stylesheet">
+                        <link href="https://fonts.maateen.me/siyam-rupali/font.css" rel="stylesheet">
+                        <link href="https://fonts.maateen.me/nikosh/font.css" rel="stylesheet">
+                        <style>
+                            * { margin: 0; padding: 0; box-sizing: border-box; }
+                            body {
+                                font-family: ${fontFamily};
+                                padding: 0.5in;
+                                font-size: ${fontSize}pt;
+                                line-height: ${lineHeight};
+                                background: white;
+                            }
+                            .borabor { font-size: ${parseInt(fontSize)+2}pt; font-weight: bold; margin-bottom: 5px; }
+                            .padobi { font-size: ${parseInt(fontSize)+1}pt; font-weight: 600; margin-bottom: 5px; display: inline-block; }
+                            .address-line { font-size: ${fontSize}pt; margin-bottom: 5px; }
+                            .bishoy { margin: 30px 0 25px; font-size: ${fontSize}pt; }
+                            .jonab { margin: 15px 0; }
+                            .content { text-align: justify; }
+                            .content p { 
+                                margin-bottom: 25px; 
+                                text-indent: ${indent}em;
+                            }
+                            .data-field { 
+                                padding: 0 3px; 
+                                font-weight: normal;
+                            }
+                            .date-left { float: left; width: 50%; margin-top: 40px; }
+                            .sign-right { float: right; width: 50%; text-align: center; margin-top: 30px; }
+                            .sign-box { border-top: 1px solid #000; width: 80%; margin: 15px auto 5px; padding-top: 10px; }
+                            .clear { clear: both; }
+                            .mobile { margin-top: 20px; }
+                            @page { size: A4; margin: 0.5in; }
+                        </style>
+                    </head>
+                    <body>
+                        ${printContents}
+                    </body>
+                </html>
+            `);
+            
+            printWindow.document.close();
+            
+            setTimeout(function() {
+                printWindow.print();
+                printWindow.close();
+            }, 250);
+        }, 150);
+    }
+    
+    // ডাটা সেভ
+    function saveData() {
+        const data = {
+            designation: document.getElementById('designation').value,
+            customDesignation: document.getElementById('customDesignation').value,
+            schoolName: document.getElementById('schoolName').value,
+            upazila: document.getElementById('upazila').value,
+            district: document.getElementById('district').value,
+            studentName: document.getElementById('studentName').value,
+            fatherName: document.getElementById('fatherName').value,
+            motherName: document.getElementById('motherName').value,
+            village: document.getElementById('village').value,
+            class: document.getElementById('class').value,
+            department: document.getElementById('department').value,
+            roll: document.getElementById('roll').value,
+            session: document.getElementById('session').value,
+            startDate: document.getElementById('startDate').value,
+            endDate: document.getElementById('endDate').value,
+            reason: document.getElementById('reason').value,
+            phone: document.getElementById('phone').value
+        };
+        localStorage.setItem('bcti_leave_all_settings', JSON.stringify(data));
+        alert('💾 ডাটা সেভ হয়েছে');
+    }
+    
+    // ডাটা লোড
+    function loadData() {
+        const saved = localStorage.getItem('bcti_leave_all_settings');
+        if(saved) {
+            try {
+                const data = JSON.parse(saved);
+                Object.keys(data).forEach(key => {
+                    const el = document.getElementById(key);
+                    if(el) el.value = data[key] || '';
+                });
+            } catch(e) {}
+        }
+    }
+</script>
+
+</body>
+</html>
