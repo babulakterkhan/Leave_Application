@@ -57,6 +57,14 @@
         .info-row{display:flex;gap:10px}
         .info-row .form-group{flex:1}
         
+        /* Institution Type */
+        .inst-type{display:flex;gap:15px;margin-bottom:15px;padding:15px;background:#e3f2fd;border-radius:10px;border:1px solid #90caf9}
+        .inst-type label{display:flex;align-items:center;gap:8px;cursor:pointer;padding:10px 20px;border-radius:8px;transition:all .3s;border:2px solid transparent}
+        .inst-type label:hover{background:#bbdefb}
+        .inst-type input[type="radio"]{width:18px;height:18px;cursor:pointer}
+        .inst-type input[type="radio"]:checked+span{font-weight:600;color:#1565c0}
+        .inst-type label:has(input:checked){background:#90caf9;border-color:#1565c0}
+        
         /* Saved Apps Section */
         .saved-section{background:#e8f5e9;padding:15px;border-radius:10px;margin-top:15px;border:1px solid #4caf50}
         .saved-section h3{color:#2e7d32;font-size:14px;margin-bottom:10px}
@@ -86,7 +94,7 @@
         @keyframes fadeInOut{0%{opacity:0;transform:translateX(-50%) translateY(20px)}15%{opacity:1;transform:translateX(-50%) translateY(0)}85%{opacity:1;transform:translateX(-50%) translateY(0)}100%{opacity:0;transform:translateX(-50%) translateY(-20px)}}
         
         @media print{body{background:white;padding:0}.form-card,.header,.footer,.no-print,.output-header{display:none!important}.output-card{box-shadow:none;border:none;max-width:100%;padding:0}.application-letter{border:none}@page{margin:10mm;size:A4}}
-        @media (max-width:768px){.container{flex-direction:column}.form-card,.output-card{max-width:100%}.date-group,.info-row{flex-direction:column}.single-date{max-width:100%}.leave-duration{flex-direction:column;gap:10px}.export-import{flex-direction:column}}
+        @media (max-width:768px){.container{flex-direction:column}.form-card,.output-card{max-width:100%}.date-group,.info-row{flex-direction:column}.single-date{max-width:100%}.leave-duration{flex-direction:column;gap:10px}.export-import{flex-direction:column}.inst-type{flex-direction:column;gap:10px}}
     </style>
 </head>
 <body>
@@ -98,6 +106,18 @@
         <div class="form-card">
             <h2>📝 তথ্য পূরণ করুন</h2>
             <form id="leaveForm">
+                <!-- Institution Type -->
+                <div class="form-group"><label>প্রতিষ্ঠানের ধরন *</label>
+                    <div class="inst-type">
+                        <label><input type="radio" name="instType" value="school" checked onchange="toggleInstType()"><span>🏫 স্কুল</span></label>
+                        <label><input type="radio" name="instType" value="college" onchange="toggleInstType()"><span>🎓 কলেজ</span></label>
+                        <label><input type="radio" name="instType" value="other" onchange="toggleInstType()"><span>📋 অন্যান্য</span></label>
+                    </div>
+                </div>
+                <div id="customHeadSection" class="hidden">
+                    <div class="form-group"><label>প্রধানের পদবী</label><input type="text" id="customHead" placeholder="যেমন: অধ্যক্ষ, সুপার, ডাইরেক্টর"></div>
+                </div>
+                
                 <div class="form-group"><label>শিক্ষার্থীর নাম *</label><input type="text" id="studentName" placeholder="যেমন: বাবুল আকতার খান" required></div>
                 <div class="info-row">
                     <div class="form-group"><label>পিতার নাম *</label><input type="text" id="fatherName" placeholder="যেমন: রহিম" required></div>
@@ -132,8 +152,8 @@
                     <div class="form-group"><label>মোট দিন *</label><input type="number" id="totalDays" placeholder="যেমন: 3" min="1"></div>
                 </div>
                 <div class="form-group"><label>ছুটির কারণ *</label><textarea id="reason" rows="3" placeholder="যেমন: অসুস্থতার" required></textarea></div>
-                <div class="form-group"><label>বিদ্যালয়ের নাম</label><input type="text" id="schoolName" value="উদাহরণ উচ্চ বিদ্যালয়"></div>
-                <div class="form-group"><label>বিদ্যালয়ের ঠিকানা</label><input type="text" id="schoolAddress" value="গ্রাম: উদাহরণ, জেলা: উদাহরণ"></div>
+                <div class="form-group"><label>প্রতিষ্ঠানের নাম</label><input type="text" id="schoolName" value="উদাহরণ উচ্চ বিদ্যালয়"></div>
+                <div class="form-group"><label>প্রতিষ্ঠানের ঠিকানা</label><input type="text" id="schoolAddress" value="গ্রাম: উদাহরণ, জেলা: উদাহরণ"></div>
                 <div class="btn-group">
                     <button type="submit" class="btn-primary">📄 আবেদন তৈরি করুন</button>
                     <button type="button" class="btn-reset" onclick="resetForm()">🔄</button>
@@ -172,6 +192,23 @@
         function toBengaliNumber(n){var d=['০','১','২','৩','৪','৫','৬','৭','৮','৯'];return String(n).replace(/[0-9]/g,function(s){return d[parseInt(s)]})}
         function showToast(msg,type){var t=document.createElement('div');t.className='toast toast-'+type;t.textContent=msg;document.body.appendChild(t);setTimeout(function(){t.remove()},3000)}
         
+        function toggleInstType(){
+            var type=document.querySelector('input[name="instType"]:checked').value;
+            var customSection=document.getElementById('customHeadSection');
+            if(type==='other'){
+                customSection.classList.remove('hidden');
+            }else{
+                customSection.classList.add('hidden');
+            }
+        }
+        
+        function getHeadTitle(){
+            var type=document.querySelector('input[name="instType"]:checked').value;
+            if(type==='school')return 'প্রধান শিক্ষক';
+            if(type==='college')return 'অধ্যক্ষ';
+            return document.getElementById('customHead').value||'অধ্যক্ষ';
+        }
+        
         function toggleDateFields(){var i='single'===document.querySelector('input[name="leaveDuration"]:checked').value,s=document.getElementById('singleDaySection'),m=document.getElementById('multipleDaySection');i?(s.classList.remove('hidden'),m.classList.add('hidden'),document.getElementById('singleDate').required=!0,document.getElementById('startDate').required=!1,document.getElementById('endDate').required=!1,document.getElementById('totalDays').required=!1):(s.classList.add('hidden'),m.classList.remove('hidden'),document.getElementById('singleDate').required=!1,document.getElementById('startDate').required=!0,document.getElementById('endDate').required=!0,document.getElementById('totalDays').required=!0)}
         
         function getBengaliDate(){return new Date().toLocaleDateString('bn-BD',{year:'numeric',month:'long',day:'numeric'})}
@@ -179,6 +216,8 @@
         
         function getFormData(){
             return{
+                instType:document.querySelector('input[name="instType"]:checked').value,
+                customHead:document.getElementById('customHead').value,
                 studentName:document.getElementById('studentName').value,
                 fatherName:document.getElementById('fatherName').value,
                 motherName:document.getElementById('motherName').value,
@@ -202,6 +241,12 @@
         }
         
         function loadFormData(data){
+            // Set institution type
+            if(data.instType){
+                document.querySelector('input[name="instType"][value="'+data.instType+'"]').checked=true;
+                toggleInstType();
+            }
+            document.getElementById('customHead').value=data.customHead||'';
             document.getElementById('studentName').value=data.studentName||'';
             document.getElementById('fatherName').value=data.fatherName||'';
             document.getElementById('motherName').value=data.motherName||'';
@@ -250,7 +295,6 @@
         function deleteApplication(id){
             if(!confirm('আপনি কি এই আবেদনটি মুছে ফেলতে চান?'))return;
             var saved=JSON.parse(localStorage.getItem('studentLeaveApps')||'[]');
-            var app=saved.find(function(a){return a.id===id});
             saved=saved.filter(function(a){return a.id!==id});
             localStorage.setItem('studentLeaveApps',JSON.stringify(saved));
             renderSavedList();
@@ -307,15 +351,15 @@
             event.target.value=''
         }
         
-        document.getElementById('leaveForm').addEventListener('submit',function(e){e.preventDefault();var s='single'===document.querySelector('input[name="leaveDuration"]:checked').value,d={studentName:document.getElementById('studentName').value,fatherName:document.getElementById('fatherName').value,motherName:document.getElementById('motherName').value,studentClass:document.getElementById('studentClass').value,section:document.getElementById('section').value,department:document.getElementById('department').value,rollNo:document.getElementById('rollNo').value,leaveType:document.getElementById('leaveType').value,isSingleDay:s,singleDate:formatDate(document.getElementById('singleDate').value),startDate:formatDate(document.getElementById('startDate').value),endDate:formatDate(document.getElementById('endDate').value),totalDays:document.getElementById('totalDays').value,reason:document.getElementById('reason').value,schoolName:document.getElementById('schoolName').value,schoolAddress:document.getElementById('schoolAddress').value,applicationDate:getBengaliDate()},t=toBengaliNumber(d.totalDays),dept=d.department?d.department+' বিভাগের ':'',dur=d.isSingleDay?'<stron>'+d.singleDate+'</stron> তারিখে একদিনের <stron>'+d.leaveType+'</stron> প্রয়োজন।':'<stron>'+d.startDate+'</stron> তারিখ হতে <stron>'+d.endDate+'</stron> তারিখ পর্যন্ত মোট <stron>'+t+'</stron> দিনের <stron>'+d.leaveType+'</stron> প্রয়োজন।',pr=d.isSingleDay?'বিধায় প্রার্থনা, আমাকে উক্ত একদিনের '+d.leaveType+' মঞ্জুর করে বাধিত করবেন।':'বিধায় প্রার্থনা, আমাকে উক্ত '+t+' দিনের '+d.leaveType+' মঞ্জুর করে বাধিত করবেন।',h='<div class="letter-date">তারিখ: '+d.applicationDate+'</div><div style="margin-bottom:15px">বরাবর,<br>প্রধান শিক্ষক,<br>'+d.schoolName+'<br>'+d.schoolAddress+'</div><div class="letter-subject">বিষয়: <stron>'+d.leaveType+'</stron>র জন্য আবেদন।</div><div style="margin-bottom:15px">মহোদয়,</div><div class="letter-body">বিনীত নিবেদন এই যে, আমি <stron>'+d.studentName+'</stron>, পিতা-'+d.fatherName+', মাতা-'+d.motherName+', আপনার বিদ্যালয়ের <stron>'+d.studentClass+'</stron> শ্রেণির <stron>'+d.section+'</stron> শাখার '+dept+'একজন শিক্ষার্থী। আমার রোল নং <stron>'+toBengaliNumber(d.rollNo)+'</stron>। আমার <stron>'+d.reason+'</stron> কারণে '+dur+'</div><div class="letter-body">'+pr+'</div><div class="letter-body" style="margin-bottom:30px">ধন্যবাদান্তে,</div><div class="letter-signature"><div>বিনীত,</div><div style="margin-top:40px"><stron>( '+d.studentName+' )</stron></div><div>'+d.studentClass+' শ্রেণি, শাখা '+d.section+', রোল: '+toBengaliNumber(d.rollNo)+'</div></div>';document.getElementById('applicationLetter').innerHTML=h;document.getElementById('placeholder').style.display='none';document.getElementById('output').style.display='block'});
+        document.getElementById('leaveForm').addEventListener('submit',function(e){e.preventDefault();var headTitle=getHeadTitle();var s='single'===document.querySelector('input[name="leaveDuration"]:checked').value,d={studentName:document.getElementById('studentName').value,fatherName:document.getElementById('fatherName').value,motherName:document.getElementById('motherName').value,studentClass:document.getElementById('studentClass').value,section:document.getElementById('section').value,department:document.getElementById('department').value,rollNo:document.getElementById('rollNo').value,leaveType:document.getElementById('leaveType').value,isSingleDay:s,singleDate:formatDate(document.getElementById('singleDate').value),startDate:formatDate(document.getElementById('startDate').value),endDate:formatDate(document.getElementById('endDate').value),totalDays:document.getElementById('totalDays').value,reason:document.getElementById('reason').value,schoolName:document.getElementById('schoolName').value,schoolAddress:document.getElementById('schoolAddress').value,applicationDate:getBengaliDate()},t=toBengaliNumber(d.totalDays),dept=d.department?d.department+' বিভাগের ':'',dur=d.isSingleDay?'<stron>'+d.singleDate+'</stron> তারিখে একদিনের <stron>'+d.leaveType+'</stron> প্রয়োজন।':'<stron>'+d.startDate+'</stron> তারিখ হতে <stron>'+d.endDate+'</stron> তারিখ পর্যন্ত মোট <stron>'+t+'</stron> দিনের <stron>'+d.leaveType+'</stron> প্রয়োজন।',pr=d.isSingleDay?'বিধায় প্রার্থনা, আমাকে উক্ত একদিনের '+d.leaveType+' মঞ্জুর করে বাধিত করবেন।':'বিধায় প্রার্থনা, আমাকে উক্ত '+t+' দিনের '+d.leaveType+' মঞ্জুর করে বাধিত করবেন।',h='<div class="letter-date">তারিখ: '+d.applicationDate+'</div><div style="margin-bottom:15px">বরাবর,<br><stron>'+headTitle+'</stron>,<br>'+d.schoolName+'<br>'+d.schoolAddress+'</div><div class="letter-subject">বিষয়: <stron>'+d.leaveType+'</stron>র জন্য আবেদন।</div><div style="margin-bottom:15px">মহোদয়,</div><div class="letter-body">বিনীত নিবেদন এই যে, আমি <stron>'+d.studentName+'</stron>, পিতা-'+d.fatherName+', মাতা-'+d.motherName+', আপনার প্রতিষ্ঠানের <stron>'+d.studentClass+'</stron> শ্রেণির <stron>'+d.section+'</stron> শাখার '+dept+'একজন শিক্ষার্থী। আমার রোল নং <stron>'+toBengaliNumber(d.rollNo)+'</stron>। আমার <stron>'+d.reason+'</stron> কারণে '+dur+'</div><div class="letter-body">'+pr+'</div><div class="letter-body" style="margin-bottom:30px">ধন্যবাদান্তে,</div><div class="letter-signature"><div>বিনীত,</div><div style="margin-top:40px"><stron>( '+d.studentName+' )</stron></div><div>'+d.studentClass+' শ্রেণি, শাখা '+d.section+', রোল: '+toBengaliNumber(d.rollNo)+'</div></div>';document.getElementById('applicationLetter').innerHTML=h;document.getElementById('placeholder').style.display='none';document.getElementById('output').style.display='block'});
         
-        function resetForm(){document.getElementById('leaveForm').reset();document.getElementById('schoolName').value='উদাহরণ উচ্চ বিদ্যালয়';document.getElementById('schoolAddress').value='গ্রাম: উদাহরণ, জেলা: উদাহরণ';document.getElementById('placeholder').style.display='block';document.getElementById('output').style.display='none';toggleDateFields()}
+        function resetForm(){document.getElementById('leaveForm').reset();document.getElementById('schoolName').value='উদাহরণ উচ্চ বিদ্যালয়';document.getElementById('schoolAddress').value='গ্রাম: উদাহরণ, জেলা: উদাহরণ';document.getElementById('placeholder').style.display='block';document.getElementById('output').style.display='none';toggleDateFields();toggleInstType()}
         
         function updateMargin(v){document.documentElement.style.setProperty('--margin-size',v+'px');document.getElementById('marginValue').textContent=v+'px'}
         function updateLineHeight(v){document.documentElement.style.setProperty('--line-height',v);document.getElementById('lineHeightValue').textContent=parseFloat(v).toFixed(1)}
         function updateFontSize(v){document.documentElement.style.setProperty('--font-size',v+'px');document.getElementById('fontSizeValue').textContent=v+'px'}
         
-        toggleDateFields();updateMargin(20);updateLineHeight(2);updateFontSize(16);renderSavedList();
+        toggleDateFields();toggleInstType();updateMargin(20);updateLineHeight(2);updateFontSize(16);renderSavedList();
     </script>
 </body>
 </html>
