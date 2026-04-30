@@ -50,6 +50,7 @@
         .letter-subject{margin-bottom:15px}
         .letter-body{text-indent:40px;text-align:justify;margin-bottom:15px}
         .letter-signature{text-align:right;margin-top:40px}
+        .letter-signature .signature-content{display:inline-block;text-align:center}
         .placeholder{padding:40px;text-align:center;color:#718096}
         .placeholder-icon{font-size:60px;margin-bottom:20px}
         .footer{text-align:center;margin-top:30px;color:white;opacity:.8;font-size:14px}
@@ -57,7 +58,6 @@
         .info-row{display:flex;gap:10px}
         .info-row .form-group{flex:1}
         
-        /* Institution Type */
         .inst-type{display:flex;gap:15px;margin-bottom:15px;padding:15px;background:#e3f2fd;border-radius:10px;border:1px solid #90caf9}
         .inst-type label{display:flex;align-items:center;gap:8px;cursor:pointer;padding:10px 20px;border-radius:8px;transition:all .3s;border:2px solid transparent}
         .inst-type label:hover{background:#bbdefb}
@@ -65,7 +65,6 @@
         .inst-type input[type="radio"]:checked+span{font-weight:600;color:#1565c0}
         .inst-type label:has(input:checked){background:#90caf9;border-color:#1565c0}
         
-        /* Saved Apps Section */
         .saved-section{background:#e8f5e9;padding:15px;border-radius:10px;margin-top:15px;border:1px solid #4caf50}
         .saved-section h3{color:#2e7d32;font-size:14px;margin-bottom:10px}
         .save-name-input{display:flex;gap:10px;margin-bottom:10px}
@@ -87,7 +86,6 @@
         .btn-export{flex:1;padding:10px;background:linear-gradient(135deg,#9c27b0,#7b1fa2);color:white;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer}
         .btn-import{flex:1;padding:10px;background:linear-gradient(135deg,#ff5722,#e64a19);color:white;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer}
         
-        /* Toast */
         .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);padding:12px 24px;border-radius:8px;color:white;font-weight:600;z-index:9999;animation:fadeInOut 3s ease-in-out;box-shadow:0 5px 20px rgba(0,0,0,.2)}
         .toast-success{background:linear-gradient(135deg,#27ae60,#2ecc71)}
         .toast-error{background:linear-gradient(135deg,#e74c3c,#c0392b)}
@@ -106,7 +104,6 @@
         <div class="form-card">
             <h2>📝 তথ্য পূরণ করুন</h2>
             <form id="leaveForm">
-                <!-- Institution Type -->
                 <div class="form-group"><label>প্রতিষ্ঠানের ধরন *</label>
                     <div class="inst-type">
                         <label><input type="radio" name="instType" value="school" checked onchange="toggleInstType()"><span>🏫 স্কুল</span></label>
@@ -159,7 +156,6 @@
                     <button type="button" class="btn-reset" onclick="resetForm()">🔄</button>
                 </div>
                 
-                <!-- Saved Section -->
                 <div class="saved-section">
                     <h3>📋 সেভ করা আবেদন</h3>
                     <div class="counter" id="counter">সর্বমোট: ০টি</div>
@@ -241,7 +237,6 @@
         }
         
         function loadFormData(data){
-            // Set institution type
             if(data.instType){
                 document.querySelector('input[name="instType"][value="'+data.instType+'"]').checked=true;
                 toggleInstType();
@@ -351,7 +346,7 @@
             event.target.value=''
         }
         
-        document.getElementById('leaveForm').addEventListener('submit',function(e){e.preventDefault();var headTitle=getHeadTitle();var s='single'===document.querySelector('input[name="leaveDuration"]:checked').value,d={studentName:document.getElementById('studentName').value,fatherName:document.getElementById('fatherName').value,motherName:document.getElementById('motherName').value,studentClass:document.getElementById('studentClass').value,section:document.getElementById('section').value,department:document.getElementById('department').value,rollNo:document.getElementById('rollNo').value,leaveType:document.getElementById('leaveType').value,isSingleDay:s,singleDate:formatDate(document.getElementById('singleDate').value),startDate:formatDate(document.getElementById('startDate').value),endDate:formatDate(document.getElementById('endDate').value),totalDays:document.getElementById('totalDays').value,reason:document.getElementById('reason').value,schoolName:document.getElementById('schoolName').value,schoolAddress:document.getElementById('schoolAddress').value,applicationDate:getBengaliDate()},t=toBengaliNumber(d.totalDays),dept=d.department?d.department+' বিভাগের ':'',dur=d.isSingleDay?'<stron>'+d.singleDate+'</stron> তারিখে একদিনের <stron>'+d.leaveType+'</stron> প্রয়োজন।':'<stron>'+d.startDate+'</stron> তারিখ হতে <stron>'+d.endDate+'</stron> তারিখ পর্যন্ত মোট <stron>'+t+'</stron> দিনের <stron>'+d.leaveType+'</stron> প্রয়োজন।',pr=d.isSingleDay?'বিধায় প্রার্থনা, আমাকে উক্ত একদিনের '+d.leaveType+' মঞ্জুর করে বাধিত করবেন।':'বিধায় প্রার্থনা, আমাকে উক্ত '+t+' দিনের '+d.leaveType+' মঞ্জুর করে বাধিত করবেন।',h='<div class="letter-date">তারিখ: '+d.applicationDate+'</div><div style="margin-bottom:15px">বরাবর,<br><stron>'+headTitle+'</stron>,<br>'+d.schoolName+'<br>'+d.schoolAddress+'</div><div class="letter-subject">বিষয়: <stron>'+d.leaveType+'</stron>র জন্য আবেদন।</div><div style="margin-bottom:15px">মহোদয়,</div><div class="letter-body">বিনীত নিবেদন এই যে, আমি <stron>'+d.studentName+'</stron>, পিতা-'+d.fatherName+', মাতা-'+d.motherName+', আপনার প্রতিষ্ঠানের <stron>'+d.studentClass+'</stron> শ্রেণির <stron>'+d.section+'</stron> শাখার '+dept+'একজন শিক্ষার্থী। আমার রোল নং <stron>'+toBengaliNumber(d.rollNo)+'</stron>। আমার <stron>'+d.reason+'</stron> কারণে '+dur+'</div><div class="letter-body">'+pr+'</div><div class="letter-body" style="margin-bottom:30px">ধন্যবাদান্তে,</div><div class="letter-signature"><div>বিনীত,</div><div style="margin-top:40px"><stron>( '+d.studentName+' )</stron></div><div>'+d.studentClass+' শ্রেণি, শাখা '+d.section+', রোল: '+toBengaliNumber(d.rollNo)+'</div></div>';document.getElementById('applicationLetter').innerHTML=h;document.getElementById('placeholder').style.display='none';document.getElementById('output').style.display='block'});
+        document.getElementById('leaveForm').addEventListener('submit',function(e){e.preventDefault();var headTitle=getHeadTitle();var s='single'===document.querySelector('input[name="leaveDuration"]:checked').value,d={studentName:document.getElementById('studentName').value,fatherName:document.getElementById('fatherName').value,motherName:document.getElementById('motherName').value,studentClass:document.getElementById('studentClass').value,section:document.getElementById('section').value,department:document.getElementById('department').value,rollNo:document.getElementById('rollNo').value,leaveType:document.getElementById('leaveType').value,isSingleDay:s,singleDate:formatDate(document.getElementById('singleDate').value),startDate:formatDate(document.getElementById('startDate').value),endDate:formatDate(document.getElementById('endDate').value),totalDays:document.getElementById('totalDays').value,reason:document.getElementById('reason').value,schoolName:document.getElementById('schoolName').value,schoolAddress:document.getElementById('schoolAddress').value,applicationDate:getBengaliDate()},t=toBengaliNumber(d.totalDays),dept=d.department?d.department+' বিভাগের ':'',dur=d.isSingleDay?'<strong>'+d.singleDate+'</strong> তারিখে একদিনের <strong>'+d.leaveType+'</strong> প্রয়োজন।':'<strong>'+d.startDate+'</strong> তারিখ হতে <strong>'+d.endDate+'</strong> তারিখ পর্যন্ত মোট <strong>'+t+'</strong> দিনের <strong>'+d.leaveType+'</strong> প্রয়োজন।',pr=d.isSingleDay?'বিধায় প্রার্থনা, আমাকে উক্ত একদিনের '+d.leaveType+' মঞ্জুর করে বাধিত করবেন।':'বিধায় প্রার্থনা, আমাকে উক্ত '+t+' দিনের '+d.leaveType+' মঞ্জুর করে বাধিত করবেন。',h='<div class="letter-date">তারিখ: '+d.applicationDate+'</div><div style="margin-bottom:15px">বরাবর,<br><strong>'+headTitle+'</strong>,<br>'+d.schoolName+'<br>'+d.schoolAddress+'</div><div class="letter-subject">বিষয়: <strong>'+d.leaveType+'</strong>র জন্য আবেদন।</div><div style="margin-bottom:15px">মহোদয়,</div><div class="letter-body">বিনীত নিবেদন এই যে, আমি <strong>'+d.studentName+'</strong>, পিতা-'+d.fatherName+', মাতা-'+d.motherName+', আপনার প্রতিষ্ঠানের <strong>'+d.studentClass+'</strong> শ্রেণির <strong>'+d.section+'</strong> শাখার '+dept+'একজন শিক্ষার্থী। আমার রোল নং <strong>'+toBengaliNumber(d.rollNo)+'</strong>। আমার <strong>'+d.reason+'</strong> কারণে '+dur+'</div><div class="letter-body">'+pr+'</div><div class="letter-body" style="margin-bottom:30px">ধন্যবাদান্তে,</div><div class="letter-signature"><div class="signature-content"><div>বিনীত,</div><div style="margin-top:40px"><strong>( '+d.studentName+' )</strong></div><div>'+d.studentClass+' শ্রেণি, শাখা '+d.section+', রোল: '+toBengaliNumber(d.rollNo)+'</div></div></div>';document.getElementById('applicationLetter').innerHTML=h;document.getElementById('placeholder').style.display='none';document.getElementById('output').style.display='block'});
         
         function resetForm(){document.getElementById('leaveForm').reset();document.getElementById('schoolName').value='উদাহরণ উচ্চ বিদ্যালয়';document.getElementById('schoolAddress').value='গ্রাম: উদাহরণ, জেলা: উদাহরণ';document.getElementById('placeholder').style.display='block';document.getElementById('output').style.display='none';toggleDateFields();toggleInstType()}
         
